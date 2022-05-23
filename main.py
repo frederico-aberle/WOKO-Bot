@@ -132,7 +132,7 @@ def send_receiver_an_email(driver, div):
 
     # send e-mail
     server.sendmail(sender,
-                    sender,
+                    receiver,
                     msg_for_receiver.as_string()
                     )
 
