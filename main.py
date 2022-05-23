@@ -3,10 +3,10 @@
 
 link = 'https://www.woko.ch/de/zimmer-in-zuerich'
 
-address = 'Elsa'
+address = 'Bülach'
 
-username = 'faberle'
-password = 'secpw##49uranus'
+username = '########'
+password = '########'
 
 sender = 'faberle@student.ethz.ch'
 
