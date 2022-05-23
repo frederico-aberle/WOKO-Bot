@@ -3,25 +3,19 @@
 
 link = 'https://www.woko.ch/de/zimmer-in-zuerich'
 
-address = 'Bülach'
+address = 'Altstetterstrasse'
 
 username = '########'
 password = '########'
 
-sender = 'faberle@student.ethz.ch'
+sender = 'nethz@student.ethz.ch'
 
 subject_msg_for_me = 'Yo, neues WG Zimmer isch frei gworde!'
-body_msg_for_me = 'Neues WG Zimmer in der Buelachstrasse freigeworden'
+body_msg_for_me = 'Neues WG Zimmer freigeworden'
 
 subject_msg_for_receiver = 'Anfrage betreffend Nachmieter Zimmer in Zürich'
-body_msg_for_receiver = 'Hey ,\n\nich wohne gerade in Wollishofen in Zürich und bin auf der Suche nach einer neuen Un' \
-                        'terkunft, da ich nach etwas Näherem zu meinen Freunden suche. Etwas über mich: Ich bin 18 Ja' \
-                        'hre alt und studiere gerade Informatik an der ETH. Ich interessiere mich sehr für Sport, vor' \
-                        ' allem für Fussball, Badminton und Basketball, aber auch Volleyball und (Tisch)Tennis. Erste' \
-                        ' Eindrücke kannst du von meinem Instagram Profil gewinnen ( https://www.instagram.com/freddy' \
-                        'y_03/ ). Bin eine Person, die gerne was mit Freunden unternimmt und sich über chillige Abend' \
-                        'e freut, gerne auch Kochabende ;)\n\nFreue mich auf ein Kennenlerngespräch ^^ Erreichen kann' \
-                        'st du mich unter der Nummer +41 76 243 3573.\n\nViele Grüße\nFrederico'
+body_msg_for_receiver = 'Hey ,\n\ndeinAnliegen\n\nFreue mich auf ein Kennenlerngespräch ^^ Erreichen kann' \
+                        'st du mich unter der Nummer +41 22 333 4444.\n\nViele Grüße\ndeinName'
 
 legi = "Legi.pdf"
 immatrikulationsbestaetigung = "Immatrikulationsbestaetigung.pdf"
@@ -57,7 +51,7 @@ def main():
             print(div.find_element(by=By.TAG_NAME, value='h3').get_attribute("textContent"))
 
             send_me_an_email()
-            # send_receiver_an_email(driver, div)
+            send_receiver_an_email(driver, div)
 
     # wait till next hour
     time.sleep(3600)
@@ -115,8 +109,8 @@ def send_receiver_an_email(driver, div):
     receiver = a.get_attribute("textContent")
 
     # get receiver's name
-    ele = driver.find_element(by=By.XPATH, value='/html/body/main/div/div/div[3]/table[2]/tbody/tr[1]/td[2]')
-    name = ele.get_attribute("textContent").split()[0]
+    elem = driver.find_element(by=By.XPATH, value='/html/body/main/div/div/div[3]/table[2]/tbody/tr[1]/td[2]')
+    name = elem.get_attribute("textContent").split()[0]
 
     # create smtp server and start smtp server
     server = smtplib.SMTP('mail.ethz.ch', 587)
@@ -144,6 +138,6 @@ def send_receiver_an_email(driver, div):
 
     driver.back()
 
-
+# repeat for 24 hours a day and 30 days a month
 for i in range(30 * 24):
     main()
