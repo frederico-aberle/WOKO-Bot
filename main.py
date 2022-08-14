@@ -1,17 +1,18 @@
-
 ############################# Edit this: ######################################
 
 link = 'https://www.woko.ch/de/zimmer-in-zuerich'
 
-address = 'Altstetterstrasse'
+address = 'Bülach'
+type_of_rent = 'Nachmiete'
+maximum_rent = 700
 
-username = '########'
-password = '########'
+username = '##########'
+password = '##########'
 
 sender = 'nethz@student.ethz.ch'
 
 subject_msg_for_me = 'Yo, neues WG Zimmer isch frei gworde!'
-body_msg_for_me = 'Neues WG Zimmer freigeworden'
+body_msg_for_me = 'Neues WG Zimmer in der Buelachstrasse oder im Bülachhof freigeworden'
 
 subject_msg_for_receiver = 'Anfrage betreffend Nachmieter Zimmer in Zürich'
 body_msg_for_receiver = 'Hey ,\n\ndeinAnliegen\n\nFreue mich auf ein Kennenlerngespräch ^^ Erreichen kann' \
@@ -19,6 +20,12 @@ body_msg_for_receiver = 'Hey ,\n\ndeinAnliegen\n\nFreue mich auf ein Kennenlerng
 
 legi = "Legi.pdf"
 immatrikulationsbestaetigung = "Immatrikulationsbestaetigung.pdf"
+
+###############################################################################
+
+############################# Container: ######################################
+
+ads_already_posted = set()
 
 ###############################################################################
 
@@ -48,10 +55,16 @@ def main():
     for div in divs:
         # check if address matches the address of the ad
         if address in div.find_elements(by=By.TAG_NAME, value='td')[-1].get_attribute("textContent"):
-            print(div.find_element(by=By.TAG_NAME, value='h3').get_attribute("textContent"))
+            if type_of_rent in div.find_elements(by=By.TAG_NAME, value='td')[0].get_attribute("textContent"):
+                if maximum_rent >= int(div.find_element(by=By.CLASS_NAME, value='preis').get_attribute("textContent")[:-3]):
+                    title = div.find_element(by=By.TAG_NAME, value='h3').get_attribute("textContent")
+                    if title not in ads_already_posted:
+                        print(title)
+                        ads_already_posted.add(title)
 
-            send_me_an_email()
-            send_receiver_an_email(driver, div)
+                        send_me_an_email()
+                        # send_receiver_an_email(driver, div)
+
 
     # wait till next hour
     time.sleep(3600)
@@ -109,8 +122,8 @@ def send_receiver_an_email(driver, div):
     receiver = a.get_attribute("textContent")
 
     # get receiver's name
-    elem = driver.find_element(by=By.XPATH, value='/html/body/main/div/div/div[3]/table[2]/tbody/tr[1]/td[2]')
-    name = elem.get_attribute("textContent").split()[0]
+    ele = driver.find_element(by=By.XPATH, value='/html/body/main/div/div/div[3]/table[2]/tbody/tr[1]/td[2]')
+    name = ele.get_attribute("textContent").split()[0]
 
     # create smtp server and start smtp server
     server = smtplib.SMTP('mail.ethz.ch', 587)
@@ -137,6 +150,7 @@ def send_receiver_an_email(driver, div):
                     )
 
     driver.back()
+
 
 # repeat for 24 hours a day and 30 days a month
 for i in range(30 * 24):
