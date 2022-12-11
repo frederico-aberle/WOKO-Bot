@@ -1,3 +1,15 @@
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+import time
+import smtplib
+from email.message import EmailMessage
+from email.mime.base import MIMEBase
+from email import encoders
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 ############################# Edit this: ######################################
 
 link = 'https://www.woko.ch/de/zimmer-in-zuerich'
@@ -29,20 +41,13 @@ ads_already_posted = set()
 
 ###############################################################################
 
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-import time
-import smtplib
-from email.message import EmailMessage
-from email.mime.base import MIMEBase
-from email import encoders
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-
 
 def main():
-    driver = webdriver.Chrome()
+    # hide UI window
+    options = Options()
+    options.add_argument("--headless")
+
+    driver = webdriver.Chrome(options=options)
     driver.get(link)
 
     # wait until ads are loaded
